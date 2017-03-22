@@ -10,4 +10,27 @@ var config = {
   idleTimeoutMillis: 30000 // 30 seconds to try to connect
 };
 
-// SELECT * From "books";
+var pool = new pg.Pool(config); //allows us to have more than one connection at a time
+
+router.get('/', function(req, res){
+  // SELECT * From "books";
+  pool.connect(function(errorConnectingToDatabase, client, done){
+    if(errorConnectingToDatabase) {
+      console.log("Error connecting to DB");
+      res.send(500);
+    } else {
+      console.log("connected");
+      client.query('SELECT * From "books";', function(queryError, result){
+        done();
+        if(queryError){
+          console.log("Error making query.");
+          res.send(500);
+        } else {
+          console.log(result);
+          res.send(result.rows);
+        }
+      });
+    }
+  });
+});
+//
