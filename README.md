@@ -26,3 +26,7 @@ Set up full stack using a database of books
 
 **Client**
 - [ ] Refresh UI after book is added
+
+# Additional
+- [ ] Add publisher and year to DB and submit form
+- [ ] clear submit form on load

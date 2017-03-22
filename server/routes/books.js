@@ -26,8 +26,31 @@ router.get('/', function(req, res){
           console.log("Error making query.");
           res.send(500);
         } else {
-          console.log(result);
           res.send(result.rows);
+        }
+      });
+    }
+  });
+});
+
+router.post('/add', function(req, res){
+  console.log(req.body);
+  var title = req.body.title;
+  var author = req.body.author;
+  //INSERT INTO books (title, author) VALUES ('Awesome Book', 'Dumb Author');
+  pool.connect(function(errorConnectingToDatabase, client, done){
+    if(errorConnectingToDatabase) {
+      console.log("Error connecting to DB");
+      res.send(500);
+    } else {
+      console.log("connected");
+      client.query("INSERT INTO books (title, author) VALUES ($1, $2);", [author, title], function(queryError, result){
+        done();
+        if(queryError){
+          console.log("Error making query.");
+          res.send(500);
+        } else {
+          res.sendStatus(201);
         }
       });
     }
