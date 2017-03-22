@@ -16,6 +16,18 @@ $('#bookForm').on('submit', function(event){
   });
 });
 
+$('#searchForm').on('submit', function (event){
+  event.preventDefault();
+  console.log("in search form path");
+  var searchTerm = $('#search').val();
+    $.ajax({
+      type: "GET",
+      url: "books/search/" + searchTerm + "/",
+      success: function(response){
+
+      }
+    });
+});
 function getBooks(){
   $.ajax({
     type: "GET",

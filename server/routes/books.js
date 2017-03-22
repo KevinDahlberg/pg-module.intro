@@ -58,6 +58,36 @@ router.post('/add', function(req, res){
     }
   });
 });
+
+router.get('/search', function (req, res){
+  console.log("in search path");
+  var match = [];
+  pool.connect(function(errorConnectingToDatabase, client, done){
+    if(errorConnectingToDatabase) {
+      console.log("Error connecting to DB");
+      res.send(500);
+    } else {
+      console.log("connected");
+      client.query('SELECT * From "books";', function(queryError, result){
+        done();
+        if(queryError){
+          console.log("Error making query.");
+          res.send(500);
+        } else {
+        for (var i = 0; i < result.length; i++) {
+          if(result[i].row.includes(req.body)){
+          console.log(result[i].row);
+          match.push(result[i].row);
+          }
+        }
+
+          res.send(match);
+        } // end else
+      });// end query
+    } //end else
+  });//end connect
+
+});//end get function
 //
 
 module.exports = router;
