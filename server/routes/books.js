@@ -37,6 +37,8 @@ router.post('/add', function(req, res){
   console.log(req.body);
   var title = req.body.title;
   var author = req.body.author;
+  var publisher = req.body.publisher;
+  var year = req.body.year;
   //INSERT INTO books (title, author) VALUES ('Awesome Book', 'Dumb Author');
   pool.connect(function(errorConnectingToDatabase, client, done){
     if(errorConnectingToDatabase) {
@@ -44,7 +46,7 @@ router.post('/add', function(req, res){
       res.send(500);
     } else {
       console.log("connected");
-      client.query("INSERT INTO books (title, author) VALUES ($1, $2);", [author, title], function(queryError, result){
+      client.query("INSERT INTO books (title, author, publisher, year) VALUES ($1, $2, $3, $4);", [title, author, publisher, year], function(queryError, result){
         done();
         if(queryError){
           console.log("Error making query.");
