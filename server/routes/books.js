@@ -57,8 +57,33 @@ router.post('/add', function(req, res){
       });
     }
   });
-});
+});// end post function
 
+//DELETE function to delete from search database
+router.delete('/delete/:bookId', function(req, res){
+  console.log("in the delete function: ", req.body);
+  var id = req.params.bookId;
+pool.connect(function(errorConnectingToDatabase, client, done){
+  if(errorConnectingToDatabase) {
+    console.log("Error connecting to DB");
+    res.send(500);
+  } else {
+    console.log("connected");
+    client.query('DELETE FROM books WHERE "id" = $1', [id], function(queryError, result){
+      done();
+      if(queryError){
+        console.log("Error making query.");
+        res.send(500);
+      } else {
+        res.sendStatus(201);
+      }
+    });
+  }
+});
+});// end delete function
+
+
+//Get Function to search in database
 router.get('/search', function (req, res){
   console.log("in search path");
   var match = [];
@@ -74,12 +99,12 @@ router.get('/search', function (req, res){
           console.log("Error making query.");
           res.send(500);
         } else {
-        for (var i = 0; i < result.length; i++) {
-          if(result[i].row.includes(req.body)){
-          console.log(result[i].row);
-          match.push(result[i].row);
+          for (var i = 0; i < result.length; i++) {
+            if(result[i].row.includes(req.body)){
+              console.log(result[i].row);
+              match.push(result[i].row);
+            }
           }
-        }
 
           res.send(match);
         } // end else
