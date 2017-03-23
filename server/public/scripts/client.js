@@ -4,13 +4,12 @@ var bookId;
 $(function(){
   console.log("JQ F-in Sourced!");
   getBooks();
-
   function getBooks(){
     $.ajax({
       type: "GET",
       url: "/books",
       success: function(response){
-        console.log("in getBooks response path");
+        console.log("getBooks called");
         $('#books').empty();
         for (var i = 0; i < response.length; i++) {
           var book = response[i];
@@ -41,7 +40,10 @@ $(function(){
   //POST function to add new book
   $('#bookForm').on('submit', function(event){
     event.preventDefault();
-    console.log($('#title').val(), $('#author').val());
+    console.log("submit bookform path");
+    if (bookId){
+      editSubmit();
+    } else {
     $.ajax({
       type: "POST",
       url: "/books/add",
@@ -49,9 +51,10 @@ $(function(){
       success: function(response) {
         console.log("book added");
         getBooks();
-        submitFormClear();
-      }
-    });
+        }
+      });
+    }
+    submitFormClear();
   });// end bookForm click event
 
   //Search form
@@ -78,7 +81,7 @@ $(function(){
     });
   });//end click function
 
-  //Delet function
+  //Delete function
   $('#books').on('click', '.delete', function(){
     console.log('Delete book' + $(this).data('book'));
     var bookId = $(this).data('book');
@@ -91,6 +94,7 @@ $(function(){
       }
     });//end ajax
   });
+
 //puts the book you want to edit into the inputs
   $('#books').on('click', '.edit', function(){
     console.log('Edit book ' + $(this).data('book') + $(this).data('author') + $(this).data('publisher') + $(this).data('year'));
@@ -100,15 +104,11 @@ $(function(){
     $('#author').val($(this).data('author'));
     $('#publisher').val($(this).data('publisher'));
     $('#year').val($(this).data('year'));
-    // $('#submit').remove();
-    // $('#submitEdit').remove();
-    // $('#bookForm').last().append('<input type="submit" name="submit" value="submit" id="submitEdit">');
-
   }); // end of edit function
 
-  $('#submitEdit').on('click', function (event){
-    event.preventDefault();
-    console.log("bookId");
+  //submits the edits to the database
+  function editSubmit(){
+    console.log("in submitEdit path");
     $.ajax({
       type: "PUT",
       url: "/books/edit",
@@ -117,18 +117,13 @@ $(function(){
         getBooks();
       }
     });
-  });
+  }
 
-  function editSubmit (object){
-
-}
+//clears the submit form
   function submitFormClear (){
     $('#title').val('');
     $('#author').val('');
     $('#publisher').val('');
     $('#year').val('');
-    $('#submit').val('');
   }
-
-
 }); // ends document ready function
