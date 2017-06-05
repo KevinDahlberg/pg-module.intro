@@ -35,4 +35,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * Prime Digital Academy
 * Fellow cohort-mates in Chi
-* Scott Promander and Chris Black
+* Scott Bromander and Chris Black
