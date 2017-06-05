@@ -43,6 +43,7 @@ $(function(){
     console.log("submit bookform path");
     if (bookId){
       editSubmit();
+      bookId = false;
     } else {
     $.ajax({
       type: "POST",
